@@ -8,71 +8,47 @@ var score;
 var gameOver;
 var scoreText;
 var scoreTime;
-var scoreTimeText;
-var timedEvent
 
-// Clase Play, donde se crean todos los sprites, el escenario del juego y se inicializa y actualiza toda la logica del juego.
-export class Play extends Phaser.Scene {
+// Clase Play2, donde se crean todos los sprites, el escenario del juego y se inicializa y actualiza toda la logica del juego.
+export class Play3 extends Phaser.Scene {
   constructor() {
     // Se asigna una key para despues poder llamar a la escena
-    super("Play");
+    super("Play3");
   }
+
   init(data) {
     // recupera el valor SCORE enviado como dato al inicio de la escena
     score = data.score;
-    scoreTime = data.scoreTime;
-
     console.log(score);
 
   }
 
+
   preload() {
-    this.load.tilemapTiledJSON("map", "public/assets/tilemaps/map.json");
-    this.load.image("tilesBelow", "public/assets/images/sky_atlas.png");
-    this.load.image("tilesPlatform", "public/assets/images/plataforma.png");
+    console.log("score");
+    this.load.tilemapTiledJSON("map2", "public/assets/tilemaps/map2.json");
+    this.load.image("tilesBelow2", "public/assets/images/sky_atlas.png");
+    this.load.image("tilesPlatform2", "public/assets/images/plataforma.png");
   
-  }
-  
-  onSecond() {
-    if (! gameOver)
-    {       
-        scoreTime = scoreTime - 1; // One second
-        scoreTimeText.setText('Time: ' + scoreTime);
-        if (scoreTime == 0) {
-            timedEvent.paused = true;
-            this.scene.start(
-              "Retry",
-              { score: score } // se pasa el puntaje como dato a la escena RETRY
-            );
-        }            
-    }
   }
 
   create() {
-    
-    timedEvent = this.time.addEvent({ 
-      delay: 1000, 
-      callback: this.onSecond, 
-      callbackScope: this, 
-      loop: true 
-    });
-
-    const map = this.make.tilemap({ key: "map" });
+    const map2 = this.make.tilemap({ key: "map2" });
 
     // Parameters are the name you gave the tileset in Tiled and then the key of the tileset image in
     // Phaser's cache (i.e. the name you used in preload)
-    const tilesetBelow = map.addTilesetImage("sky_atlas", "tilesBelow");
+    const tilesetBelow2 = map2.addTilesetImage("sky_atlas", "tilesBelow2");
 
-    const tilesetPlatform = map.addTilesetImage(
+    const tilesetPlatform2 = map2.addTilesetImage(
       "plataforma",
-      "tilesPlatform"
+      "tilesPlatform2"
     );
 
   
     // Parameters: layer name (or index) from Tiled, tileset, x, y
-    const belowLayer = map.createLayer("Fondo", tilesetBelow, 0, 0);
-    const worldLayer = map.createLayer("Plataformas", tilesetPlatform, 0, 0);
-    const objectsLayer = map.getObjectLayer("Objetos");
+    const belowLayer = map2.createLayer("Fondo", tilesetBelow2, 0, 0);
+    const worldLayer = map2.createLayer("Plataformas", tilesetPlatform2, 0, 0);
+    const objectsLayer = map2.getObjectLayer("Objetos");
 
     worldLayer.setCollisionByProperty({ collides: true });
 
@@ -87,7 +63,7 @@ export class Play extends Phaser.Scene {
     */
 
     // Find in the Object Layer, the name "dude" and get position
-    const spawnPoint = map.findObject("Objetos", (obj) => obj.name === "dude");
+    const spawnPoint = map2.findObject("Objetos", (obj) => obj.name === "dude");
     // The player and its settings
     player = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, "dude");
 
@@ -144,12 +120,12 @@ export class Play extends Phaser.Scene {
       bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
 
     //  The score
-    scoreText = this.add.text(30, 6, "Score: 0", {
+    scoreText = this.add.text(30, 6, ("Score: " + score), {
       fontSize: "32px",
       fill: "#000",
     });
 
-    scoreTimeText = this.add.text(630, 6, "Time: " + scoreTime, {
+    scoreTime = this.add.text(630, 6, "Time: 60", {
       fontSize: "32px",
       fill: "#000",
     });
@@ -169,9 +145,7 @@ export class Play extends Phaser.Scene {
     this.physics.add.collider(player, bombs, this.hitBomb, null, this);
 
     gameOver = false;
-    score = 0;
-
-    
+   
   }
 
   update() {
@@ -232,20 +206,23 @@ export class Play extends Phaser.Scene {
       bomb.setBounce(1);
       bomb.setCollideWorldBounds(true);
       bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
-
-      this.scene.start(
-      "Play2",
-      { score: score, scoreTime: scoreTime } // se pasa el puntaje como dato a la escena RETRY
-      );
       
+      this.scene.start(
+        "victory",
+      { score: score } // se pasa el puntaje como dato a la escena Play2
+      );
+
     }
 
   }
     
+  
+
   collectGem (player, gem)
-  {
+{
     gem.disableBody(true, true);
 
+   
     score += 15;
     scoreText.setText('Score: ' + score);
 
@@ -264,22 +241,19 @@ export class Play extends Phaser.Scene {
 
         });
 
-        var x =
-        player.x < 400
-          ? Phaser.Math.Between(400, 800)
-          : Phaser.Math.Between(0, 400);
+        var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
 
-        var bomb = bombs.create(x, 16, "bomb");
+        var bomb = bombs.create(x, 16, 'bomb');
         bomb.setBounce(1);
         bomb.setCollideWorldBounds(true);
         bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+        bomb.allowGravity = false;
 
         this.scene.start(
-          "Play2",
+          "victory",
         { score: score } // se pasa el puntaje como dato a la escena Play2
         );
-
-    } 
+    }
   }
 
   hitBomb(player, bomb) {
@@ -300,5 +274,7 @@ export class Play extends Phaser.Scene {
       );
     }, 1000); // Ese número es la cantidad de milisegundos
   }
+  }
+
     
-}
+
