@@ -7,14 +7,11 @@ export class Preloads extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("sad_cow", "public/assets/images/sad_cow.png");
-    this.load.image("phaser_logo", "public/assets/images/phaser_logo.png");
-    this.load.image(
-      "mainmenu_bg",
-      "public/assets/images/main_menu_background.png"
-    );
-    this.load.image("sky", "public/assets/images/sky.png");
-    this.load.image("star", "public/assets/images/star.png");
+    this.load.image("loss", "public/assets/images/loss.png");
+    this.load.image("logo", "public/assets/images/logo.png");
+    this.load.image("victory", "public/assets/images/victory.png");
+    this.load.image("sky", "public/assets/images/sky2.png");
+    this.load.image("star", "public/assets/images/star2.png");
     this.load.image("gem", "public/assets/images/gema.png");
     this.load.image("bomb", "public/assets/images/bomb.png");
 

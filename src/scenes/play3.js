@@ -8,6 +8,8 @@ var score;
 var gameOver;
 var scoreText;
 var scoreTime;
+var scoreTimeText;
+var timedEvent;
 
 // Clase Play2, donde se crean todos los sprites, el escenario del juego y se inicializa y actualiza toda la logica del juego.
 export class Play3 extends Phaser.Scene {
@@ -19,36 +21,60 @@ export class Play3 extends Phaser.Scene {
   init(data) {
     // recupera el valor SCORE enviado como dato al inicio de la escena
     score = data.score;
+    scoreTime=data.scoreTime;
+
     console.log(score);
 
   }
 
+  onSecond() {
+    if (! gameOver)
+    {
+        scoreTime = scoreTime - 1; // One second
+        scoreTimeText.setText('Time: ' + scoreTime);
+        if (scoreTime == 0) {
+            timedEvent.paused = true;
+            this.scene.start(
+              "Retry",
+              { score: score } // se pasa el puntaje como dato a la escena RETRY
+            );
+        }
+    }
+  }
 
   preload() {
     console.log("score");
-    this.load.tilemapTiledJSON("map2", "public/assets/tilemaps/map2.json");
-    this.load.image("tilesBelow2", "public/assets/images/sky_atlas.png");
-    this.load.image("tilesPlatform2", "public/assets/images/plataforma.png");
+    this.load.tilemapTiledJSON("map3", "public/assets/tilemaps/map3.json");
+    this.load.image("tilesBelow3", "public/assets/images/sky2_atlas.png");
+    this.load.image("tilesPlatform3", "public/assets/images/2 atlas.png");
   
   }
 
   create() {
-    const map2 = this.make.tilemap({ key: "map2" });
+
+    timedEvent = this.time.addEvent({ 
+      delay: 1000, 
+      callback: this.onSecond, 
+      callbackScope: this, 
+      loop: true 
+    });
+    
+    const map3 = this.make.tilemap({ key: "map3" });
 
     // Parameters are the name you gave the tileset in Tiled and then the key of the tileset image in
     // Phaser's cache (i.e. the name you used in preload)
-    const tilesetBelow2 = map2.addTilesetImage("sky_atlas", "tilesBelow2");
+    const tilesetBelow3 = map3.addTilesetImage("sky2_atlas", "tilesBelow3");
 
-    const tilesetPlatform2 = map2.addTilesetImage(
-      "plataforma",
-      "tilesPlatform2"
+    const tilesetPlatform3 = map3.addTilesetImage(
+      "2 atlas",
+      "tilesPlatform3"
     );
 
   
     // Parameters: layer name (or index) from Tiled, tileset, x, y
-    const belowLayer = map2.createLayer("Fondo", tilesetBelow2, 0, 0);
-    const worldLayer = map2.createLayer("Plataformas", tilesetPlatform2, 0, 0);
-    const objectsLayer = map2.getObjectLayer("Objetos");
+    const belowLayer = map3.createLayer("Fondo", tilesetBelow3, 0, 0);
+    const worldLayer = map3.createLayer("Plataformas", tilesetPlatform3, 0, 0);
+    const objectsLayer = map3.getObjectLayer("Objetos");
 
     worldLayer.setCollisionByProperty({ collides: true });
 
@@ -63,7 +89,7 @@ export class Play3 extends Phaser.Scene {
     */
 
     // Find in the Object Layer, the name "dude" and get position
-    const spawnPoint = map2.findObject("Objetos", (obj) => obj.name === "dude");
+    const spawnPoint = map3.findObject("Objetos", (obj) => obj.name === "dude");
     // The player and its settings
     player = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, "dude");
 
@@ -117,17 +143,41 @@ export class Play3 extends Phaser.Scene {
       var bomb = bombs.create(x, 16, "bomb");
       bomb.setBounce(1);
       bomb.setCollideWorldBounds(true);
-      bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+      bomb.setVelocity(Phaser.Math.Between(200, 400), 80);
+      bomb.allowGravity = false;
+
+    var y =
+        player.y > 400
+          ? Phaser.Math.Between(800, 400)
+          : Phaser.Math.Between(0, 400);
+
+      var bomb = bombs.create(x, 16, "bomb");
+      bomb.setBounce(1);
+      bomb.setCollideWorldBounds(true);
+      bomb.setVelocity(Phaser.Math.Between(200, 400), 80);
+      bomb.allowGravity = false;
+
+    var z =
+        player.y < 400
+          ? Phaser.Math.Between(800, 400)
+          : Phaser.Math.Between(0, 400);
+
+      var bomb = bombs.create(x, 16, "bomb");
+      bomb.setBounce(1);
+      bomb.setCollideWorldBounds(true);
+      bomb.setVelocity(Phaser.Math.Between(250, 400), 100);
+      bomb.allowGravity = false;
+
 
     //  The score
     scoreText = this.add.text(30, 6, ("Score: " + score), {
       fontSize: "32px",
-      fill: "#000",
+      fill: "white",
     });
 
-    scoreTime = this.add.text(630, 6, "Time: 60", {
+    scoreTimeText = this.add.text(630, 6, "Time: " + score, {
       fontSize: "32px",
-      fill: "#000",
+      fill: "white",
     });
 
     // Collide the player and the stars with the platforms
@@ -196,16 +246,6 @@ export class Play3 extends Phaser.Scene {
             child.enableBody(true, child.x, 0, true, true);
 
         });
-
-      var x =
-        player.x < 400
-          ? Phaser.Math.Between(400, 800)
-          : Phaser.Math.Between(0, 400);
-
-      var bomb = bombs.create(x, 16, "bomb");
-      bomb.setBounce(1);
-      bomb.setCollideWorldBounds(true);
-      bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
       
       this.scene.start(
         "victory",
@@ -240,14 +280,6 @@ export class Play3 extends Phaser.Scene {
             child.enableBody(true, child.x, 0, true, true);
 
         });
-
-        var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
-
-        var bomb = bombs.create(x, 16, 'bomb');
-        bomb.setBounce(1);
-        bomb.setCollideWorldBounds(true);
-        bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
-        bomb.allowGravity = false;
 
         this.scene.start(
           "victory",

@@ -9,7 +9,7 @@ var gameOver;
 var scoreText;
 var scoreTime;
 var scoreTimeText;
-var timedEvent
+var timedEvent;
 
 // Clase Play, donde se crean todos los sprites, el escenario del juego y se inicializa y actualiza toda la logica del juego.
 export class Play extends Phaser.Scene {
@@ -17,8 +17,9 @@ export class Play extends Phaser.Scene {
     // Se asigna una key para despues poder llamar a la escena
     super("Play");
   }
+
   init(data) {
-    // recupera el valor SCORE enviado como dato al inicio de la escena
+    // recupera el valor SCORE y scoreTime enviado como dato al inicio de la escena
     score = data.score;
     scoreTime = data.scoreTime;
 
@@ -28,8 +29,8 @@ export class Play extends Phaser.Scene {
 
   preload() {
     this.load.tilemapTiledJSON("map", "public/assets/tilemaps/map.json");
-    this.load.image("tilesBelow", "public/assets/images/sky_atlas.png");
-    this.load.image("tilesPlatform", "public/assets/images/plataforma.png");
+    this.load.image("tilesBelow", "public/assets/images/sky2_atlas.png");
+    this.load.image("tilesPlatform", "public/assets/images/2 atlas.png");
   
   }
   
@@ -49,7 +50,7 @@ export class Play extends Phaser.Scene {
   }
 
   create() {
-    
+
     timedEvent = this.time.addEvent({ 
       delay: 1000, 
       callback: this.onSecond, 
@@ -61,10 +62,10 @@ export class Play extends Phaser.Scene {
 
     // Parameters are the name you gave the tileset in Tiled and then the key of the tileset image in
     // Phaser's cache (i.e. the name you used in preload)
-    const tilesetBelow = map.addTilesetImage("sky_atlas", "tilesBelow");
+    const tilesetBelow = map.addTilesetImage("sky2_atlas", "tilesBelow");
 
     const tilesetPlatform = map.addTilesetImage(
-      "plataforma",
+      "2 atlas",
       "tilesPlatform"
     );
 
@@ -142,16 +143,18 @@ export class Play extends Phaser.Scene {
       bomb.setBounce(1);
       bomb.setCollideWorldBounds(true);
       bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+      bomb.allowGravity = false;
+
 
     //  The score
-    scoreText = this.add.text(30, 6, "Score: 0", {
+    scoreText = this.add.text(30, 6, "Score: " + score, {
       fontSize: "32px",
-      fill: "#000",
+      fill: "white",
     });
 
     scoreTimeText = this.add.text(630, 6, "Time: " + scoreTime, {
       fontSize: "32px",
-      fill: "#000",
+      fill: "white",
     });
 
     // Collide the player and the stars with the platforms
@@ -169,7 +172,7 @@ export class Play extends Phaser.Scene {
     this.physics.add.collider(player, bombs, this.hitBomb, null, this);
 
     gameOver = false;
-    score = 0;
+    
 
     
   }
@@ -235,7 +238,7 @@ export class Play extends Phaser.Scene {
 
       this.scene.start(
       "Play2",
-      { score: score, scoreTime: scoreTime } // se pasa el puntaje como dato a la escena RETRY
+      { score: score, scoreTime: scoreTime } // se pasa el puntaje como dato a la escena Play2
       );
       
     }
@@ -276,7 +279,7 @@ export class Play extends Phaser.Scene {
 
         this.scene.start(
           "Play2",
-        { score: score } // se pasa el puntaje como dato a la escena Play2
+        { score: score, scoreTime:scoreTime } // se pasa el puntaje como dato a la escena Play2
         );
 
     } 

@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "sky2_atlas.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 800,
+				"h": 607
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "sky2.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 798,
+						"h": 605
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 798,
+						"h": 605
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 798,
+						"h": 605
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:053e685d515ae3edc17c1205ab46eb6c:5eaa3556efe9752de78c280cf41bd12c:537d4070ba01a52d55e6ce2ce25de96e$"
+	}
+}

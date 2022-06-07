@@ -8,18 +8,23 @@ export class MainMenu extends Phaser.Scene {
     }
 
     create() {
-        // Fondo del menú principal
-        this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'mainmenu_bg').setScale(1.1);
+        this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'sky');
+        // texto del menú principal
+        this.add.text(this.cameras.main.centerX/1.65, this.cameras.main.centerY/1.1, "SpaceGame", {
+            fontSize: "64px",
+            fill: "white",
+          });
         // Logo de Phaser
-        this.add.image(this.cameras.main.centerX, this.cameras.main.centerY/1.5, 'phaser_logo');
+        this.add.image(this.cameras.main.centerX, this.cameras.main.centerY/1.5, 'logo');
+        
 
         // Boton para comenzar a jugar
         const boton = new Button(this.cameras.main.centerX, this.cameras.main.centerY + this.cameras.main.centerY/3, 'Play', this, () => {
             // Instrucción para pasar a la escena Play
-            this.scene.start("Play", 
+            this.scene.start("Play3", 
             {
                 score:0, 
-                scoreTime: 5
+                scoreTime: 60
             });
         });
     }
