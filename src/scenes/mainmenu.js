@@ -24,7 +24,7 @@ export class MainMenu extends Phaser.Scene {
             this.scene.start("Play", 
             {
                 score:0, 
-                scoreTime: 60
+                scoreTime: 300
             });
         });
     }

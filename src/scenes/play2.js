@@ -164,7 +164,7 @@ export class Play2 extends Phaser.Scene {
       fill: "white",
     });
 
-    scoreTimeText = this.add.text(630, 6, "Time: " + scoreTime, {
+    scoreTimeText = this.add.text(600, 6, "Time: " + scoreTime, {
       fontSize: "32px",
       fill: "white",
     });
