@@ -21,7 +21,7 @@ export class MainMenu extends Phaser.Scene {
         // Boton para comenzar a jugar
         const boton = new Button(this.cameras.main.centerX, this.cameras.main.centerY + this.cameras.main.centerY/3, 'Play', this, () => {
             // Instrucción para pasar a la escena Play
-            this.scene.start("Play", 
+            this.scene.start("Play2", 
             {
                 score:0, 
                 scoreTime: 300

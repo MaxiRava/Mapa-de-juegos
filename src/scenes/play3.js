@@ -157,18 +157,6 @@ export class Play3 extends Phaser.Scene {
       bomb.setVelocity(Phaser.Math.Between(200, 400), 80);
       bomb.allowGravity = false;
 
-    var z =
-        player.y < 400
-          ? Phaser.Math.Between(800, 400)
-          : Phaser.Math.Between(0, 400);
-
-      var bomb = bombs.create(x, 16, "bomb");
-      bomb.setBounce(1);
-      bomb.setCollideWorldBounds(true);
-      bomb.setVelocity(Phaser.Math.Between(250, 400), 100);
-      bomb.allowGravity = false;
-
-
     //  The score
     scoreText = this.add.text(30, 6, ("Score: " + score), {
       fontSize: "32px",
